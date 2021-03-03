@@ -4,10 +4,6 @@ const csv = require('csvtojson');
 
 const router = express.Router();
 
-const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost/test');
-
 // async function getCategories() {
 //   return csv().fromFile('./data/categories.csv');
 // }
