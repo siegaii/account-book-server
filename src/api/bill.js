@@ -1,22 +1,14 @@
 const express = require('express');
 
-const csv = require('csvtojson');
+const { queryCollection } = require('../db');
 
 const router = express.Router();
 
-// async function getCategories() {
-//   return csv().fromFile('./data/categories.csv');
-// }
-
-// let categories;
-// getCategories().then((data) => {
-//   categories = data;
-// });
-
 router.get('/', async (req, res, next) => {
   try {
-    const data = await csv().fromFile('./data/bill.csv');
-    res.json(data);
+    await queryCollection('bill');
+    // console.log('bills: ', bills);
+    res.json({ hello: 'siegaii' });
   } catch (error) {
     next(error);
   }
