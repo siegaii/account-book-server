@@ -77,10 +77,9 @@ function closeDB() {
 async function queryCollection(name) {
   try {
     const db = await connectDB(DB.database);
-    const data = await db.collection(name).find().toArray();
-    console.log('array: ', data);
+    return await db.collection(name).find().toArray();
   } catch (err) {
-    console.log('err: ', err);
+    return err;
   } finally {
     closeDB();
   }

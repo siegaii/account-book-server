@@ -2,13 +2,14 @@ const express = require('express');
 
 const { queryCollection } = require('../db');
 
+const { resObj } = require('../utils');
+
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    await queryCollection('bill');
-    // console.log('bills: ', bills);
-    res.json({ hello: 'siegaii' });
+    const data = await queryCollection('bill');
+    res.json(resObj(data));
   } catch (error) {
     next(error);
   }
