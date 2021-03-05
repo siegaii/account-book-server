@@ -11,8 +11,10 @@
   "author": "siegaii",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
+    "express-validator": "^6.10.0",
     "mongodb": "^3.6.4"
   },
   "devDependencies": {

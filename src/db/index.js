@@ -82,6 +82,15 @@ async function queryCollection(name, fun) {
   return data;
 }
 
+// 插入数据
+async function insertDataforCollection(name, fun) {
+  const db = await connectDB(DB.database);
+  const col = await db.collection(name);
+  const data = await fun(col);
+  closeDB();
+  return data;
+}
+
 // 数据库初始化
 async function initDB() {
   try {
@@ -101,5 +110,6 @@ module.exports = {
   initDB,
   closeDB,
   connectDB,
-  queryCollection
+  queryCollection,
+  insertDataforCollection
 };

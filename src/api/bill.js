@@ -1,8 +1,7 @@
 const express = require('express');
-
-const { queryCollection } = require('../db');
-
-const { resObj } = require('../utils');
+const { body, validationResult } = require('express-validator');
+const { queryCollection, insertDataforCollection } = require('../db');
+const { resObj, isNotEmpty } = require('../utils');
 
 const router = express.Router();
 
@@ -25,9 +24,29 @@ router.get('/', async (req, res, next) => {
 
     const bill = await queryCollection('bill', (col) => col.find(options.find).project({ _id: 0 }).sort(options.sort).toArray());
     res.json(resObj(bill));
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
+
+router.post(
+  '/',
+  body('time').custom(isNotEmpty),
+  body('type').custom(isNotEmpty),
+  body('category').custom(isNotEmpty),
+  body('amount').custom(isNotEmpty),
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      const bill = await insertDataforCollection('bill', (col) => col.insert(req.body));
+      res.json(resObj(bill.ops));
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 module.exports = router;

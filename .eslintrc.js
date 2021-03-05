@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'no-console': 'off',
+    'consistent-return': 'off',
     'import/no-unresolved': 'off'
   }
 };
