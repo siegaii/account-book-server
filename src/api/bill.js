@@ -1,13 +1,15 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const { queryCollection, insertDataforCollection } = require('../db');
-const { resObj, isNotEmpty } = require('../utils');
+const { resObj, isNotEmpty, getMonthTimerange } = require('../utils');
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const options = {};
+    const options = {
+      find: {}
+    };
 
     // 分类
     if (req.query.category) {
@@ -15,8 +17,9 @@ router.get('/', async (req, res, next) => {
     }
 
     // 时间
-    if (req.query.time) {
-      console.log('req.query.time: ', req.query.time);
+    if (req.query.month) {
+      const monthTimerange = getMonthTimerange(new Date(Number(req.query.year)).getFullYear(), Number(req.query.month));
+      options.find.time = { $gte: monthTimerange[0], $lt: monthTimerange[1] };
     }
 
     // 排序

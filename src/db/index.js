@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
 const { MongoClient } = require('mongodb');
 const csv = require('csvtojson');
 const path = require('path');
@@ -99,8 +101,15 @@ async function initDB() {
     if (!billCollection) {
       console.log('Collection not exists');
       await Promise.all([initCollection(db, 'bill'), initCollection(db, 'categories')]);
+
+      db.collection('bill')
+        .find({ time: { $type: 2 } })
+        .forEach(function (x) {
+          // eslint-disable-next-line no-param-reassign
+          x.time = Number(x.time);
+          db.collection('bill').updateOne(x);
+        });
     }
-    closeDB();
   } catch (err) {
     console.log('err: ', err);
   }

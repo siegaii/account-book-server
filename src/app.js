@@ -6,7 +6,12 @@ const api = require('./api');
 const app = express();
 
 app.use(express.static('public'));
-app.use(bodyParser());
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+app.use(bodyParser.json());
 app.use('/api/v1', api);
 app.use(middlewares.notFound);
 
