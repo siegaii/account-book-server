@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const data = await queryCollection('categories');
+    const data = await queryCollection('categories', (col) => col.find().project({ _id: 0 }).toArray());
     res.json(resObj(data));
   } catch (error) {
     next(error);

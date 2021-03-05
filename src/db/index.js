@@ -74,15 +74,12 @@ function closeDB() {
 }
 
 // 查集合
-async function queryCollection(name) {
-  try {
-    const db = await connectDB(DB.database);
-    return await db.collection(name).find().toArray();
-  } catch (err) {
-    return err;
-  } finally {
-    closeDB();
-  }
+async function queryCollection(name, fun) {
+  const db = await connectDB(DB.database);
+  const col = await db.collection(name);
+  const data = await fun(col);
+  closeDB();
+  return data;
 }
 
 // 数据库初始化
