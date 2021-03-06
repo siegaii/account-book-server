@@ -27,7 +27,7 @@ router.get('/', async (req, res, next) => {
     }
 
     // 排序
-    options.sort.amount = req.query.amountSort ? null : Number(req.query.amountSort);
+    options.sort.amount = req.query.amountSort ? Number(req.query.amountSort) : null;
 
     const aggregateArray = [
       {
@@ -47,6 +47,7 @@ router.get('/', async (req, res, next) => {
     ];
     if (req.query.amountSort) {
       aggregateArray.splice(1, 0, { $sort: options.sort });
+      console.log('aggregateArray: ', aggregateArray);
     }
 
     const bill = await queryCollection('bill', (col) => col.aggregate(aggregateArray).toArray());

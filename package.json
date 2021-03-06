@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
+    "dev": "cross-env NODE_ENV=dev nodemon ./src/index.js",
+    "start": "cross-env NODE_ENV=production node ./src/index.js",
     "test": "jest --detectOpenHandles",
     "lint": "eslint --fix src"
   },
@@ -18,6 +19,7 @@
     "mongodb": "^3.6.4"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
