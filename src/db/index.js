@@ -116,6 +116,7 @@ async function initDB() {
 }
 
 module.exports = {
+  client,
   initDB,
   closeDB,
   connectDB,

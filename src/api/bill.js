@@ -19,12 +19,15 @@ router.get('/', async (req, res, next) => {
 
     // 时间
     if (req.query.month) {
-      const monthTimerange = getMonthTimerange(new Date(Number(req.query.year)).getFullYear(), Number(req.query.month));
+      const monthTimerange = getMonthTimerange(
+        new Date(Number(req.query.year)).getFullYear(),
+        Number(req.query.month)
+      );
       options.match.time = { $gte: monthTimerange[0], $lt: monthTimerange[1] };
     }
 
     // 排序
-    options.sort.amount = req.query.amountSort === '0' ? 0 : Number(req.query.amountSort);
+    options.sort.amount = req.query.amountSort ? null : Number(req.query.amountSort);
 
     const aggregateArray = [
       {
@@ -42,7 +45,7 @@ router.get('/', async (req, res, next) => {
         }
       }
     ];
-    if (req.query.amountSort !== '0') {
+    if (req.query.amountSort) {
       aggregateArray.splice(1, 0, { $sort: options.sort });
     }
 
