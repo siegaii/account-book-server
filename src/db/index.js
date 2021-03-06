@@ -1,11 +1,12 @@
-/* eslint-disable func-names */
-/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 const { MongoClient } = require('mongodb');
 const csv = require('csvtojson');
 const path = require('path');
-const { DA, DB } = require('./dbconfig.js');
+const { DB } = require('./dbconfig.js');
 
-const mongoUri = `mongodb://${DA.username}:${DA.password}@${DB.ip}:${DB.port}/${DB.database}`;
+// const mongoUri = `mongodb://${DA.username}:${DA.password}@${DB.ip}:${DB.port}/${DB.database}`;
+const mongoUri = `mongodb://${DB.ip}:${DB.port}/${DB.database}`;
 
 let client;
 
@@ -58,6 +59,7 @@ async function initCollection(db, name) {
   const filePath = `${path.resolve(__dirname, './data')}/${name}.csv`;
   // 1.获取数据
   const data = await csv().fromFile(filePath);
+  data.map((item) => (item.time = Number(item.time)));
   // 2.创建集合
   const collection = await createCollection(db, name);
   // 3. 将数据批量导入
@@ -101,17 +103,11 @@ async function initDB() {
     if (!billCollection) {
       console.log('Collection not exists');
       await Promise.all([initCollection(db, 'bill'), initCollection(db, 'categories')]);
-
-      db.collection('bill')
-        .find({ time: { $type: 2 } })
-        .forEach(function (x) {
-          // eslint-disable-next-line no-param-reassign
-          x.time = Number(x.time);
-          db.collection('bill').updateOne(x);
-        });
     }
   } catch (err) {
     console.log('err: ', err);
+  } finally {
+    closeDB();
   }
 }
 
